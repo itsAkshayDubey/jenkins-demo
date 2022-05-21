@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3-alpine'
-            args '-v /root/.m2:/root/.m2'
-        }
-    }
+    agent any
     options {
         skipStagesAfterUnstable()
     }
@@ -18,15 +13,10 @@ pipeline {
             steps {
                 sh 'mvn test -Dmaven.test.failure.ignore=true'
             }
-            post {
-                success {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
         }
-        stage('Deliver') {
+        stage('Complete') {
             steps {
-                sh './jenkins/scripts/deliver.sh'
+                sh "echo 'Done!'"
             }
         }
     }
